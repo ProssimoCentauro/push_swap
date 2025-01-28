@@ -3,16 +3,14 @@
 
 #include "libft/header_files/ft_printf.h"
 #include "libft/header_files/libft.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef struct inputs
-{
-
-}
-
-typedef	struct	s_list
+typedef	struct	s_stack
 {
 	void	*content;
+    int flag;
 	struct s_list	*next;
-}
+}   t_stack;
 
 #endif
