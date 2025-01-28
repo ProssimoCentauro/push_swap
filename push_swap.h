@@ -5,12 +5,11 @@
 #include "libft/header_files/libft.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+/*
 typedef	struct	s_stack
 {
 	void	*content;
-    int flag;
 	struct s_list	*next;
 }   t_stack;
-
+*/
 #endif

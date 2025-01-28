@@ -11,6 +11,8 @@ int	check_args(char **args)
         j = 0;
         if (args[i][j] == '+' || args[i][j]== '-')
             j++;
+        if (args[i][j] == '\0')
+            return (0);
         while (args[i][j] >= '0' && args[i][j] <= '9')
             j++;
         if (args[i][j] != '\0')
@@ -20,24 +22,31 @@ int	check_args(char **args)
     return (1);
 }
 
-void check_duplicates(t_list *lst)
+int    check_duplicates(t_list *lst)
 {
-    long arr[1000];
-    long *num;
-    size_t  i;
-
-    i = 0;
-    while (arr[i])
-        arr[i++] = 0;
-    while (lst)
+    long    *num;
+    t_list  *to_check;
+    t_list  *current;
+    
+    if (!lst->next)
+        return (1);
+    to_check = lst;
+    while (to_check)
     {
-        num = lst->content;
-        if (arr[*num] == 0)
-            arr[*num] = 1;
-        else if (arr[*num] == 1)
-            exit(EXIT_FAILURE);
-        lst = lst->next;
+        current = lst;
+        num = to_check->content;
+        while(current)
+        {
+            if (to_check != current)
+            {
+                if (*num == *((long *)(current->content)))
+                    return (0);
+            }
+            current = current->next;
+        }
+        to_check = to_check->next;
     }
+    return (1);
 }
 
 long	ft_atol(char *nptr)
@@ -125,7 +134,8 @@ int	main(int ac, char **av)
 		free(matrix);
 		matrix = NULL;
 	}
-    check_duplicates(lst);
-	print_stack(lst, 'A');
+    if (check_duplicates(lst) == 0)
+        exit(EXIT_FAILURE);
+    print_stack(lst, 'A');
 	return (0);
 }
