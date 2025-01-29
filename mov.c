@@ -1,46 +1,32 @@
-void	sa(t_list **lst)
-{
-	long	*tmp;
-
-	if (!lst || !(*lst) || !(*lst)->next)
-		return ;
-	tmp = (*lst)->next->content;
-	(*lst)->next->content = (*lst)->content;
-	(*lst)->content = tmp;
-	ft_printf("sa\n");
-}
-/*
-void	sa(t_list *lst)
+void	sa(t_list **a)
 {
     t_list  *temp;
-
-	if (!lst || !lst->next)
-		return ;
-
+    
+    if (!*a || !(*a)->next)
+	    return ;
+    temp = (*a)->next;
+    (*a)->next = temp->next;
+    temp->next = *a;
     ft_printf("sa\n");
-}*/
-
-void	sb(t_list *lst)
-{
-	long	*tmp;
-
-	if (!lst || !lst->next)
-		return ;
-	tmp = lst->next->content;
-	lst->next->content = lst->content;
-	lst->content = tmp;
-	ft_printf("sb\n");
 }
 
-void	ss(t_list *lst)
+void	sb(t_list **b)
 {
-	long	*tmp;
+    t_list  *temp;
+    
+    if (!*b || !(*b)->next)
+	    return ;
+    temp = (*b)->next;
+    (*b)->next = temp->next;
+    temp->next = *b;
 
-	if (!lst || !lst->next)
-		return ;
-	tmp = lst->next->content;
-	lst->next->content = lst->content;
-	lst->content = tmp;
+    ft_printf("sb\n");
+}
+
+void	ss(t_list **a, t_list **b)
+{
+	sa(a);
+	sb(b);
 	ft_printf("ss\n");
 }
 
