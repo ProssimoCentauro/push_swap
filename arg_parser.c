@@ -1,4 +1,5 @@
 #include "push_swap.h"
+#include "mov.c"
 
 int	check_args(char **args)
 {
@@ -107,6 +108,45 @@ void	print_stack(t_list *lst, char c)
 	ft_printf("\n|-------------|\n", c);
 }
 
+t_list  *find_max(t_list *lst)
+{
+    long *num;
+    long *num2;
+    t_list  *res;
+
+    res = lst;
+    lst = lst->next;
+    while (lst)
+    {
+        num = res->content;
+        num2 = lst->content;
+        if (*num2 > *num)
+        {
+            *num = *num2;
+            res = lst;
+        }
+        lst = lst->next;
+    }
+    return (res);
+}
+
+void    three_sort(t_list **lst)
+{
+    long    *num;
+    long    *num2;
+    t_list  *max;
+
+    max = find_max(*lst);
+    if (max == *lst)
+        ra(lst);
+    else if (max == (*lst)->next)
+        rra(lst);
+    num = (*lst)->content;
+    num2 = (*lst)->next->content;
+    if (*num > *num2)
+        sa(lst);
+}
+
 int	main(int ac, char **av)
 {
     (void)ac;
@@ -136,6 +176,8 @@ int	main(int ac, char **av)
 	}
     if (check_duplicates(lst) == 0)
         exit(EXIT_FAILURE);
+    print_stack(lst, 'A');
+    three_sort(&lst);
     print_stack(lst, 'A');
 	return (0);
 }
