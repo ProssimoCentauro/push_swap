@@ -1,6 +1,35 @@
 #include "push_swap.h"
 #include "mov.c"
 
+void    free_matrix(char ***matrix)
+{
+    char    **mat;
+    size_t  i;
+    
+    mat = *matrix;
+    i = 0;
+    while (mat[i])
+	{
+		free(mat[i]);
+		mat[i++] = NULL;
+	}
+	free(mat);
+	mat = NULL;
+}
+
+void content_del(void *content)
+{
+    free(content);
+}
+
+void    free_and_exit(t_list **lst, void (*del)(void *), char *message)
+{
+    if (lst)
+        ft_lstclear(lst, del);
+    ft_printf("%s", message);
+    exit(EXIT_FAILURE);
+}
+
 int	check_args(char **args)
 {
     size_t  i;
@@ -14,7 +43,7 @@ int	check_args(char **args)
             j++;
         if (args[i][j] == '\0')
             return (0);
-        while (args[i][j] >= '0' && args[i][j] <= '9')
+        while (args[i][j] >= '0' && args[i][j] <= '9' && args[i][j] != '\"')
             j++;
         if (args[i][j] != '\0')
             return (0);
@@ -73,24 +102,32 @@ long	ft_atol(char *nptr)
 	return (num * sign);
 }
 
-void	create_list(t_list **lst, char **matrix)
+void create_list(t_list **lst, char ***matrix)
 {
 	t_list	*node;
 	long	*num;
+    char    **mat;
+    size_t  i;
 
-	while (*matrix)
+    mat = *matrix;
+    i = 0;
+	while (mat[i])
 	{
 		num = (long *)malloc(sizeof(int));
 		if (!num)
-			exit(EXIT_FAILURE);
-		*num = ft_atol(*matrix);
+			free_and_exit(lst, content_del, MALLOC_ERROR);
+		*num = ft_atol(mat[i]);
+//da controllare min int senza '-'
         if (*num > 2147483647)
-            exit(EXIT_FAILURE);
-		node = ft_lstnew(num);
+        {
+            free_matrix(matrix);
+			free_and_exit(lst, content_del, INPUT_ERROR);
+        }
+        node = ft_lstnew(num);
 		if (!node)
-			exit(EXIT_FAILURE);
+			free_and_exit(lst, content_del, MALLOC_ERROR);
 		ft_lstadd_back(lst, node);
-		matrix++;
+		i++;
 	}
 }
 
@@ -110,21 +147,20 @@ void	print_stack(t_list *lst, char c)
 
 t_list  *find_max(t_list *lst)
 {
-    long *num;
-    long *num2;
+    long    *num;
+    long    *num2;
     t_list  *res;
 
+    if (!lst)
+        return (NULL);
     res = lst;
     lst = lst->next;
     while (lst)
     {
-        num = res->content;
-        num2 = lst->content;
+        num = (long *)res->content;
+        num2 = (long *)lst->content;
         if (*num2 > *num)
-        {
-            *num = *num2;
             res = lst;
-        }
         lst = lst->next;
     }
     return (res);
@@ -138,13 +174,13 @@ void    three_sort(t_list **lst)
 
     max = find_max(*lst);
     if (max == *lst)
-        ra(lst);
+        ra(lst, 1);
     else if (max == (*lst)->next)
-        rra(lst);
+        rra(lst, 1);
     num = (*lst)->content;
     num2 = (*lst)->next->content;
     if (*num > *num2)
-        sa(lst);
+        sa(lst, 1);
 }
 
 int	main(int ac, char **av)
@@ -153,31 +189,27 @@ int	main(int ac, char **av)
 	t_list	*lst;
 	char	**matrix;
 	size_t	i;
-	size_t	j;
 
     lst = NULL;
 	i = 1;
 	while (av[i])
 	{
-		j = 0;
 		matrix = ft_split(av[i++], ' ');
 		if (!matrix)
-			exit(EXIT_FAILURE);
+			free_and_exit(&lst, content_del, MALLOC_ERROR);
         if (!check_args(matrix))
-			exit(EXIT_FAILURE);
-		create_list(&lst, matrix);
-		while (matrix[j])
-		{
-			free(matrix[j]);
-			matrix[j++] = NULL;
-		}
-		free(matrix);
-		matrix = NULL;
-	}
+        {
+            free_matrix(&matrix);
+			free_and_exit(&lst, content_del, INPUT_ERROR);
+        }
+        create_list(&lst, &matrix);
+        free_matrix(&matrix);
+    }
     if (check_duplicates(lst) == 0)
-        exit(EXIT_FAILURE);
+        free_and_exit(&lst, content_del, INPUT_ERROR);
     print_stack(lst, 'A');
-    three_sort(&lst);
-    print_stack(lst, 'A');
+  //  three_sort(&lst);
+  //  print_stack(lst, 'A');
+    ft_lstclear(&lst, content_del);
 	return (0);
 }

@@ -3,8 +3,12 @@
 
 #include "libft/header_files/ft_printf.h"
 #include "libft/header_files/libft.h"
+#include "libft/header_files/get_next_line.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#define MALLOC_ERROR "\n\033[1;31m><>< MALLOC ERROR ><><\033[0m\n"
+#define INPUT_ERROR "Error\n"
 /*
 typedef	struct	s_stack
 {
