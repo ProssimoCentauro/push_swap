@@ -115,7 +115,7 @@ void	create_list(t_list **lst, char ***matrix)
 	i = 0;
 	while (mat[i])
 	{
-		num = (long *)malloc(sizeof(int));
+		num = (long *)malloc(sizeof(long));
 		if (!num)
 			free_and_exit(lst, content_del, MALLOC_ERROR);
 		*num = ft_atol(mat[i]);
