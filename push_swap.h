@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MALLOC_ERROR "\n\033[1;31m><>< MALLOC ERROR ><><\033[0m\n"
+#define MALLOC_ERROR "\n\033[1;31m><>< MALLOC ERROR ><><\033[0m\n\n"
 #define INPUT_ERROR "Error\n"
 /*
 typedef	struct	s_stack
