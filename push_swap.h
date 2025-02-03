@@ -16,4 +16,15 @@ typedef	struct	s_stack
 	struct s_list	*next;
 }   t_stack;
 */
+void    sa(t_list **a, int flag);
+void    sb(t_list **b, int flag);
+void    ss(t_list **a, t_list **b);
+void	pa(t_list **a, t_list **b, int flag);
+void	pb(t_list **a, t_list **b, int flag);
+void	ra(t_list **a, int flag);
+void	rb(t_list **b, int flag);
+void	rr(t_list **a, t_list **b);
+void	rra(t_list **a, int flag);
+void	rrb(t_list **b, int flag);
+void	rrr(t_list **a, t_list **b);
 #endif

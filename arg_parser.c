@@ -1,4 +1,5 @@
 #include "mov.c"
+#include "algo.c"
 #include "push_swap.h"
 
 void	free_matrix(char ***matrix)
@@ -119,10 +120,10 @@ void	create_list(t_list **lst, char ***matrix)
 		if (!num)
 			free_and_exit(lst, content_del, MALLOC_ERROR);
 		*num = ft_atol(mat[i]);
-		// da controllare min int senza '-'
-		if (*num > 2147483647)
+		if (*num > 2147483647 || *num < -2147483648)
 		{
 			free_matrix(matrix);
+			free(num);
 			free_and_exit(lst, content_del, INPUT_ERROR);
 		}
 		node = ft_lstnew(num);
@@ -204,6 +205,8 @@ void	parse_args(t_list **a_stack, char **av)
 		create_list(a_stack, &matrix);
 		free_matrix(&matrix);
 	}
+	if (check_duplicates(*a_stack) == 0)
+		free_and_exit(a_stack, content_del, INPUT_ERROR);
 }
 
 int	main(int ac, char **av)
@@ -214,15 +217,13 @@ int	main(int ac, char **av)
 	a_stack = NULL;
 	b_stack = NULL;
 	if (ac == 1)
-		free_and_exit(&a_stack, content_del, INPUT_ERROR);
+		exit(EXIT_FAILURE);
 	parse_args(&a_stack, av);
-	if (check_duplicates(a_stack) == 0)
-		free_and_exit(&a_stack, content_del, INPUT_ERROR);
 	print_stack(a_stack, 'A');
 	print_stack(b_stack, 'B');
-	pa(&a_stack, &b_stack, 1);
+/*	start_algo(&a_stack, &b_stack);
 	print_stack(a_stack, 'A');
-	print_stack(b_stack, 'B');
+	print_stack(b_stack, 'B');*/
 	ft_lstclear(&a_stack, content_del);
 	return (0);
 }
