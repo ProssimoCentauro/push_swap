@@ -12,55 +12,59 @@
 
 typedef struct s_directions
 {
-	int	a_dir;
-	int	b_dir;
-} t_directions;
-
+	int		a_dir;
+	int		b_dir;
+}			t_directions;
 
 // 1 = r
 // -1 = rr
 typedef struct s_steps
 {
-	int	ra_steps;
-	int	rb_steps;
-	int	rra_steps;
-	int	rrb_steps;
+    int a_index;
+    int b_index;
+	int		ra_steps;
+	int		rb_steps;
+	int		rra_steps;
+	int		rrb_steps;
 	t_res	res;
-} t_steps
+} t_steps;
 
-typedef	struct	s_res
+	typedef struct s_res
 {
-        int     ra_steps;
-        int     rb_steps;
-        int     rra_steps;
-        int     rrb_steps;
+    int a_index;
+    int b_index
+        int a_index;
+    int b_index;;
+	int		ra_steps;
+	int		rb_steps;
+	int		rra_steps;
+	int		rrb_steps;
 
-	int	origs[2];	
-	int r_rr;
-	int	moves;
-}
+	int		origs[2];
+	int		best;
+}   t_res;
+
+
+
 
 	// moves
-void    sa(t_list **a, int flag);
-void	sb(t_list **b, int flag);
-void	ss(t_list **a, t_list **b);
-void	pa(t_list **a, t_list **b, int flag);
-void	pb(t_list **a, t_list **b, int flag);
-void	ra(t_list **a, int flag);
-void	rb(t_list **b, int flag);
-void	rr(t_list **a, t_list **b);
-void	rra(t_list **a, int flag);
-void	rrb(t_list **b, int flag);
-void	rrr(t_list **a, t_list **b);
-
-
-
+void		sa(t_list **a, int flag);
+void		sb(t_list **b, int flag);
+void		ss(t_list **a, t_list **b);
+void		pa(t_list **a, t_list **b, int flag);
+void		pb(t_list **a, t_list **b, int flag);
+void		ra(t_list **a, int flag);
+void		rb(t_list **b, int flag);
+void		rr(t_list **a, t_list **b);
+void		rra(t_list **a, int flag);
+void		rrb(t_list **b, int flag);
+void		rrr(t_list **a, t_list **b);
 
 // controllare se è il numero massimo
-                // se si calcolare index del numero massimo di b
-                // altrimenti calcolare index del numero sopra cui dovrebbe andare il numero di a
-                // vedere se le direzioni sono uguali
-                // sottrarre per calcolare le mosse che possono avvenire insieme
-                // spostare i numeri in prima posizione
-                // pushare in b;
+// se si calcolare index del numero massimo di b
+// altrimenti calcolare index del numero sopra cui dovrebbe andare il numero di a
+// vedere se le direzioni sono uguali
+// sottrarre per calcolare le mosse che possono avvenire insieme
+// spostare i numeri in prima posizione
+// pushare in b;
 #endif
