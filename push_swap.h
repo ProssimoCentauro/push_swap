@@ -10,40 +10,6 @@
 # define MALLOC_ERROR "\n\033[1;31m><>< MALLOC ERROR ><><\033[0m\n\n"
 # define INPUT_ERROR "Error\n"
 
-typedef struct s_directions
-{
-	int		a_dir;
-	int		b_dir;
-}			t_directions;
-
-// 1 = r
-// -1 = rr
-typedef struct s_steps
-{
-    int a_index;
-    int b_index;
-	int		ra_steps;
-	int		rb_steps;
-	int		rra_steps;
-	int		rrb_steps;
-	t_res	res;
-} t_steps;
-
-	typedef struct s_res
-{
-    int a_index;
-    int b_index
-        int a_index;
-    int b_index;;
-	int		ra_steps;
-	int		rb_steps;
-	int		rra_steps;
-	int		rrb_steps;
-
-	int		origs[2];
-	int		best;
-}   t_res;
-
 //////////////////////////////////////////////////////////
 ///
 
@@ -55,6 +21,8 @@ typedef struct  s_indexes
 
 typedef struct  s_best
 {
+	int	rb;
+	int	rrb;
     int a_index;
     int b_index;
     int a_moves;

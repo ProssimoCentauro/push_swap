@@ -88,7 +88,7 @@ void	rb(t_list **b, int flag)
 	temp->next = NULL;
 	ft_lstadd_back(b, temp);
 	if (flag == 1)
-		ft_printf("ra\n");
+		ft_printf("rb\n");
 }
 
 void	rr(t_list **a, t_list **b)

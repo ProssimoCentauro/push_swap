@@ -47,7 +47,17 @@ int ft_abs(int num)
     return(num);
 }
 
-void update_best(t_best *best, t_indexes indxs, t_list *a, t_list *b)
+long	get_num(int index, t_list *lst)
+{
+	while(index)
+	{
+		lst = lst->next;
+		index--;
+	}
+	return (*((long *)(lst->content)));
+}
+
+void update_best(t_best *best, t_indexes *indxs, t_list *a, t_list *b)
 {
     int ra;
     int rb;
@@ -55,11 +65,16 @@ void update_best(t_best *best, t_indexes indxs, t_list *a, t_list *b)
     int rrb;
     t_best  tmp_best;
 
-    ra = indxs.a_index;
-    rb = indxs.b_index;
-    rra = indxs.a_index - ft_lstsize(a);
-    rrb = indxs.b_index - ft_lstsize(b);
+    ra = indxs->a_index;
+    rb = indxs->b_index;
+    rra = indxs->a_index - ft_lstsize(a);
+    rrb = indxs->b_index - ft_lstsize(b);
 
+	ft_printf("ra: %n\n", ra);
+	ft_printf("rb: %n\n", rb);
+	ft_printf("rra: %n\n", rra);
+	ft_printf("rrb: %n\n", rrb);
+	exit(EXIT_SUCCESS);
     if (ra < (rra * -1))
         tmp_best.a_moves = ra;
     else
@@ -92,15 +107,17 @@ void update_best(t_best *best, t_indexes indxs, t_list *a, t_list *b)
 //controllare se è il best
     if (tmp_best.moves < best->moves)
     {
-        best->a_index = indxs.a_index;
-        best->b_index = indxs.b_index;
+	    best->rb = rb;
+	    best->rrb = rrb;
+        best->a_index = indxs->a_index;
+        best->b_index = indxs->b_index;
         best->a_moves = tmp_best.a_moves;
         best->b_moves = tmp_best.b_moves;
         best->moves = tmp_best.moves;
     }
 }
 
-int get_index(t_list *head, long *num)
+int get_index(t_list *lst, long *num)
 {
     int size = ft_lstsize(lst);
     int index;
@@ -122,65 +139,142 @@ long calc_b_num(long *a_num, t_list *b)
     long    sub;
     long    res;
     
-    sub = *a_num - *((long *)(lst->content));
-    res = *((long *)(lst->content));
+    sub = *a_num - *((long *)(b->content));
+    res = *((long *)(b->content));
     b = b->next;
     while (b)
     {
-        if (*a_num - *((long *)(lst->content)) < sub)
+        if (*a_num - *((long *)(b->content)) < sub)
         {
-            sub = *a_num - *((long *)(lst->content));
-            res = *((long *)(lst->content));
+            sub = *a_num - *((long *)(b->content));
+            res = *((long *)(b->content));
         }
         b = b->next;
     }
     return (res);
 }
 
-void    rotate_and_push(t_best best, t_list **a, t_list **b)
+
+void move_same_sign(t_best *best, t_list **a, t_list **b)
 {
-    if (same_sign(best.a_moves, best.b_moves))
-    {
-        if (best.a_moves > 0)
+        if (best->a_moves > 0)
         {
-            while (best.a_moves != 0 || best.b_moves != 0)
+            while (best->a_moves > 0 || best->b_moves > 0)
             {
+		    ft_printf("%i\n", best->a_moves);
                 rr(a, b);
-                best.a_moves--;
-                best.b_moves--;
+                best->a_moves -= 1;
+                best->b_moves -= 1;
             }
-            while (best.a_moves != 0)
+            while (best->a_moves > 0)
             {
-                best.a_moves--;
-                ra(a, 0);
+                best->a_moves -= 1;
+                ra(a, 1);
             }
-            while (best.b_moves != 0)
+            while (best->b_moves > 0)
             {
-                best.b_moves--;
-                rb(b, 0);
+                best->b_moves -= 1;
+                rb(b, 1);
             }
         }
-        else if (best.a_moves < 0)
+        else if (best->a_moves < 0)
         {
-            while (best.a_moves != 0 || best.b_moves != 0)
+            while (best->a_moves < 0 || best->b_moves < 0)
             {
                 rr(a, b);
-                best.a_moves++;
-                best.b_moves++;
+                best->a_moves += 1;
+                best->b_moves += 1;
             }
-            while (best.a_moves != 0)
+            while (best->a_moves < 0)
             {
-                best.a_moves++;
-                ra(a, 0);
+                best->a_moves += 1;
+                ra(a, 1);
             }
-            while (best.b_moves != 0)
+            while (best->b_moves < 0)
             {
-                best.b_moves++;
-                rb(b, 0);
+                best->b_moves += 1;
+                rb(b, 1);
             }
         }
-    }
+}
+
+void	move_case_1(t_best *best, t_list **a, t_list **b)
+{
+	while (best->rb > 0)
+	{
+		rr(a, b);
+		best->rb -= 1;
+		best->moves -= 1;
+	}
+	while (best->moves > 0)
+	{
+		ra(a, 1);
+		best->moves -= 1;
+	}
+}
+
+void	move_case_2(t_best *best, t_list **a, t_list **b)
+{
+	while (best->rrb < 0)
+	{
+		rrr(a, b);
+		best->rrb += 1;
+		best->moves -= 1;
+	}
+	while (best->moves > 0)
+	{
+		rra(a, 1);
+		best->moves -= 1;
+	}
+}
+
+void	move_case_3(t_best *best, t_list **a, t_list **b)
+{
+	if (best->a_moves < 0)
+	{
+		while (best->a_moves)
+		{
+			rra(a, 1);
+			best->a_moves += 1;
+		}
+	}
+	else if (best->a_moves >= 0)
+	{
+		while (best->a_moves)
+		{
+			ra(a, 1);
+			best->a_moves -= 1;
+		}
+	}
+	if (best->b_moves < 0)
+	{
+		while (best->b_moves)
+		{
+			rrb(b, 1);
+			best->b_moves += 1;
+		}
+	}
+	else if (best->b_moves >= 0)
+	{
+		while (best->b_moves)
+		{
+			rb(b, 1);
+			best->b_moves -= 1;
+		}
+	}
+}
+
+void    rotate_and_push(t_best *best, t_list **a, t_list **b)
+{
+    if (same_sign(best->a_moves, best->b_moves))
+	    move_same_sign(best, a, b);
+    else if (best->a_moves >= 0 && best->a_moves >= best->rb)
+	    move_case_1(best, a, b);
+    else if (best->a_moves < 0 && best->a_moves <= best->rrb)
+	    move_case_2(best, a, b);
     else
+	    move_case_3(best, a, b);
+    pb(a, b, 1);
 }
 
 void    cheapest_num(t_list **a, t_list **b)
@@ -189,21 +283,25 @@ void    cheapest_num(t_list **a, t_list **b)
     t_list *a_head;
     t_list *b_head;
     t_best  best;
+	long	num;
 
     a_head = *a;
+    pb(a, b, 1);
+    pb(a, b, 1);
     b_head = *b;
-    while (ft_lstsize != 3)
+    while (ft_lstsize(*a) > 3)
     {
         while (*a)
         {
-            indxs.a_index = get_index(a_head, *a->content);
-            indxs.b_index = get_index(b_head,
-                    &calc_b_num(*a->content, b_head));
-            check_best(&best, indxs, a_head, b_head);
+            indxs.a_index = get_index(a_head, (*a)->content);
+            num = calc_b_num((*a)->content, b_head);
+	    indxs.b_index = get_index(b_head, &num);
+            update_best(&best, &indxs, a_head, b_head);
             *a = (*a)->next;
         }
         //quando la lista viene esaminata tutta, bisogna ruotare le due lista di tot e pushare l'lelemento. Fatto questo va riesaminata tutta per rivenedere il nuovo best elemento da pushare, il puntatore come va gestito?
+    	*a = a_head;
+	rotate_and_push(&best, a, b);
     }
-    rotate_and_push(best, a, b);
     //reset best;
 }
