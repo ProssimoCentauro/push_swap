@@ -44,8 +44,23 @@ typedef struct s_steps
 	int		best;
 }   t_res;
 
+//////////////////////////////////////////////////////////
+///
 
+typedef struct  s_indexes
+{
+    int a_index;
+    int b_index;
+}   t_indexes;
 
+typedef struct  s_best
+{
+    int a_index;
+    int b_index;
+    int a_moves;
+    int b_moves;
+    int moves;
+}   t_best;
 
 	// moves
 void		sa(t_list **a, int flag);
