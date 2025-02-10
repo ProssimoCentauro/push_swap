@@ -225,7 +225,10 @@ int	main(int ac, char **av)
 //	start_algo(&a_stack, &b_stack);
 	
 //	ft_printf("\n-------------------------\n");	
-	cheapest_num(&a_stack, &b_stack);
+	if (ft_lstsize(a_stack) > 3)
+		cheapest_num(&a_stack, &b_stack);
+	else
+		three_sort(&a_stack);
 //	print_stack(a_stack, 'A');
 //	print_stack(b_stack, 'B');
 
