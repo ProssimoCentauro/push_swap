@@ -232,19 +232,19 @@ void move_same_sign(t_best *best, t_list **a, t_list **b)
         {
             while (best->a_moves < 0 || best->b_moves < 0)
             {
-                rr(a, b);
+                rrr(a, b);//prima era rr
                 best->a_moves += 1;
                 best->b_moves += 1;
             }
             while (best->a_moves < 0)
             {
                 best->a_moves += 1;
-                ra(a, 1);
+                rra(a, 1);
             }
             while (best->b_moves < 0)
             {
                 best->b_moves += 1;
-                rb(b, 1);
+                rrb(b, 1);
             }
         }
 }
@@ -348,7 +348,9 @@ void    cheapest_num(t_list **a, t_list **b)
     t_list *b_head;
     t_best  best;
 	long	num;
+	//int i;
 
+	//i = 0;
     best_init(&best);
     pb(a, b, 1);
     pb(a, b, 1);
@@ -371,7 +373,14 @@ void    cheapest_num(t_list **a, t_list **b)
         }
         *a = a_head;
         rotate_and_push(&best, a, b);
-        best_init(&best);
+  /*      if (i == 3)
+	{	
+		print_stack(*a, 'A');
+        	print_stack(*b, 'B');
+		exit(1);
+	}*/
+	//i++;
+	best_init(&best);
     }
     //reset best;
 }

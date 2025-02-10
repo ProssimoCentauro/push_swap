@@ -43,6 +43,8 @@ void		rra(t_list **a, int flag);
 void		rrb(t_list **b, int flag);
 void		rrr(t_list **a, t_list **b);
 
+void    print_stack(t_list *lst, char c);
+
 // controllare se è il numero massimo
 // se si calcolare index del numero massimo di b
 // altrimenti calcolare index del numero sopra cui dovrebbe andare il numero di a
