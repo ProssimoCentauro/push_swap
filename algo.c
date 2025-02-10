@@ -17,11 +17,11 @@ int detect_half(t_list *lst, long *num)
         return (1);
     return (-1);
 }
-
+/*
 void    move(t_list **a, t_list **b)
 {
     
-}
+}*/
 
 int ft_max(int a, int b)
 {
@@ -70,11 +70,11 @@ void update_best(t_best *best, t_indexes *indxs, t_list *a, t_list *b)
     rra = indxs->a_index - ft_lstsize(a);
     rrb = indxs->b_index - ft_lstsize(b);
 
-	ft_printf("ra: %n\n", ra);
-	ft_printf("rb: %n\n", rb);
-	ft_printf("rra: %n\n", rra);
-	ft_printf("rrb: %n\n", rrb);
-	exit(EXIT_SUCCESS);
+	/*ft_printf("ra: %d\n", ra);
+	ft_printf("rb: %d\n", rb);
+	ft_printf("rra: %d\n", rra);
+	ft_printf("rrb: %d\n", rrb);
+	*/////////exit(EXIT_SUCCESS);
     if (ra < (rra * -1))
         tmp_best.a_moves = ra;
     else
@@ -115,13 +115,57 @@ void update_best(t_best *best, t_indexes *indxs, t_list *a, t_list *b)
         best->b_moves = tmp_best.b_moves;
         best->moves = tmp_best.moves;
     }
+    /*ft_printf("best rb: %d\n", best->rb);
+    ft_printf("best rrb: %d\n", best->rrb);
+    ft_printf("a_moves: %d\n", best->a_moves);
+    ft_printf("b_moves: %d\n", best->b_moves);
+    *///exit(EXIT_SUCCESS);
+
+}
+
+void    print_lst(t_list *lst)
+{
+    ft_printf("--------------\n");
+    while (lst)
+    {
+        ft_printf("%u\n", *((long *)(lst->content)));
+        lst = lst->next;
+    }
+    ft_printf("--------------\n");
+}
+
+int	max_min(long num, t_list *b_stack)
+{
+    t_list  *head;
+    int flag;
+
+    head = b_stack;
+	flag = 1;
+    while (b_stack)
+	{
+		if (*((long *)(b_stack->content)) > num)
+        {
+            flag = 0;
+            break;
+        }
+		b_stack = b_stack->next;
+	}
+    if (flag == 1)
+        return (1);
+    b_stack = head;
+    while   (b_stack)
+    {
+        if (*((long *)(b_stack->content)) < num)
+            return (0);
+        b_stack = b_stack->next;
+    }
+	return (1);
 }
 
 int get_index(t_list *lst, long *num)
 {
-    int size = ft_lstsize(lst);
     int index;
-
+    
     index = 0;
     while (lst)
     {
@@ -136,19 +180,26 @@ int get_index(t_list *lst, long *num)
 //calcola quale numero prendere a seconda del numero in a 
 long calc_b_num(long *a_num, t_list *b)
 {
-    long    sub;
     long    res;
-    
-    sub = *a_num - *((long *)(b->content));
-    res = *((long *)(b->content));
-    b = b->next;
+    t_list  *head;
+
+    res = -2147483648;
+    head = b;
+    if (!max_min(*a_num, b))
+    {
+        while (b->next)
+        {
+            if (*a_num < *((long *)(b->content)) &&
+                    *a_num > *((long *)(b->next->content)))
+                return (*((long *)(b->next->content)));
+            b = b->next;
+        }
+        return (*((long*)(head->content)));
+    }
     while (b)
     {
-        if (*a_num - *((long *)(b->content)) < sub)
-        {
-            sub = *a_num - *((long *)(b->content));
+        if (res < *((long *)(b->content)))
             res = *((long *)(b->content));
-        }
         b = b->next;
     }
     return (res);
@@ -157,11 +208,11 @@ long calc_b_num(long *a_num, t_list *b)
 
 void move_same_sign(t_best *best, t_list **a, t_list **b)
 {
-        if (best->a_moves > 0)
+        if (best->a_moves >= 0)
         {
             while (best->a_moves > 0 || best->b_moves > 0)
             {
-		    ft_printf("%i\n", best->a_moves);
+		    //ft_printf("%i\n", best->a_moves);
                 rr(a, b);
                 best->a_moves -= 1;
                 best->b_moves -= 1;
@@ -266,6 +317,8 @@ void	move_case_3(t_best *best, t_list **a, t_list **b)
 
 void    rotate_and_push(t_best *best, t_list **a, t_list **b)
 {
+    /*ft_printf("\n%d -- %d\n", best->a_moves, best->b_moves);
+    exit(0);*/
     if (same_sign(best->a_moves, best->b_moves))
 	    move_same_sign(best, a, b);
     else if (best->a_moves >= 0 && best->a_moves >= best->rb)
@@ -277,6 +330,17 @@ void    rotate_and_push(t_best *best, t_list **a, t_list **b)
     pb(a, b, 1);
 }
 
+void    best_init(t_best *best)
+{
+    best->rb = 0;
+    best->rrb = 0;
+    best->a_index = 0;
+    best->b_index = 0;
+    best->a_moves = 0;
+    best->b_moves = 0;
+    best->moves = 2147483647;
+}
+
 void    cheapest_num(t_list **a, t_list **b)
 {
     t_indexes   indxs;
@@ -285,23 +349,29 @@ void    cheapest_num(t_list **a, t_list **b)
     t_best  best;
 	long	num;
 
-    a_head = *a;
+    best_init(&best);
     pb(a, b, 1);
     pb(a, b, 1);
-    b_head = *b;
+    //pb(a, b, 1);
+    //pb(a, b, 1);
     while (ft_lstsize(*a) > 3)
     {
+        a_head = *a;
+        b_head = *b;
         while (*a)
         {
             indxs.a_index = get_index(a_head, (*a)->content);
             num = calc_b_num((*a)->content, b_head);
-	    indxs.b_index = get_index(b_head, &num);
+            //ft_printf("%d\n", num);
+            indxs.b_index = get_index(b_head, &num);
+            //ft_printf("a: %i -- b: %i\n", indxs.a_index, indxs.b_index);
+            //exit(0);
             update_best(&best, &indxs, a_head, b_head);
             *a = (*a)->next;
         }
-        //quando la lista viene esaminata tutta, bisogna ruotare le due lista di tot e pushare l'lelemento. Fatto questo va riesaminata tutta per rivenedere il nuovo best elemento da pushare, il puntatore come va gestito?
-    	*a = a_head;
-	rotate_and_push(&best, a, b);
+        *a = a_head;
+        rotate_and_push(&best, a, b);
+        best_init(&best);
     }
     //reset best;
 }
