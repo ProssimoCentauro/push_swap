@@ -219,15 +219,15 @@ int	main(int ac, char **av)
 	if (ac == 1)
 		exit(EXIT_FAILURE);
 	parse_args(&a_stack, av);
-	print_stack(a_stack, 'A');
-	print_stack(b_stack, 'B');
+//	print_stack(a_stack, 'A');
+//	print_stack(b_stack, 'B');
 //	ft_printf("%p\n",&b_stack);
 //	start_algo(&a_stack, &b_stack);
 	
-	ft_printf("\n-------------------------\n");	
+//	ft_printf("\n-------------------------\n");	
 	cheapest_num(&a_stack, &b_stack);
-	print_stack(a_stack, 'A');
-	print_stack(b_stack, 'B');
+//	print_stack(a_stack, 'A');
+//	print_stack(b_stack, 'B');
 
 	ft_lstclear(&a_stack, content_del);
 	return (0);
