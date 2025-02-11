@@ -1,5 +1,7 @@
 #include "push_swap.h"
 
+long	get_min(t_list *stack);
+
 int	detect_half(t_list *lst, long *num)
 {
 	int	size;
@@ -204,7 +206,7 @@ void	move_same_sign(t_best *best, t_list **a, t_list **b)
 {
 	if (best->a_moves >= 0)
 	{
-		while (best->a_moves > 0 && best->b_moves > 0) //prima era ||
+		while (best->a_moves > 0 && best->b_moves > 0) // prima era ||
 		{
 			// ft_printf("%i\n", best->a_moves);
 			rr(a, b);
@@ -349,65 +351,126 @@ long	get_max(t_list *stack)
 	return (max);
 }
 
-void	rotate_stack(t_list **stack)
+void	rot_to_min(t_list **stack, int flag)
 {
-	long	max;
+	long	min;
 	int		index;
 	int		size;
 
-	max = get_max(*stack);
-	index = get_index(*stack, &max);
+	min = get_min(*stack);
+	//ft_printf("%d\n\n", min);
+	index = get_index(*stack, &min);
 	size = ft_lstsize(*stack);
 	if (index <= size / 2)
 	{
 		while (index > 0)
 		{
-			rb(stack, 1);
-			//ft_printf("rotate\n");
+			if (flag == 1)
+				ra(stack, 1);
+			else
+				rb(stack, 1);
 			index--;
 		}
 	}
 	else
 	{
 		index = ft_abs(index - size);
+		//ft_printf("%d\n\n", index);
 		while (index > 0)
 		{
-			rrb(stack, 1);
-			//ft_printf("reverse rotate\n");
+			if (flag == 1)
+				rra(stack, 1);
+			else
+				rrb(stack, 1);
 			index--;
 		}
 	}
 }
 
+void	rotate_a(t_list **a, int index)
+{
+	int	size;
+	int	moves;
+
+	size = ft_lstsize(*a);
+	if (index >= size)
+	{
+		moves = index;
+		while (moves)
+		{
+			ra(a, 1);
+			moves--;
+		}
+	}
+	else
+	{
+		moves = ft_abs(index - size);
+		while (moves)
+		{
+			rra(a, 1);
+			moves--;
+		}
+	}
+}
+
+long    calc_a_num(long *b_num, t_list *a)
+{
+        long    res;
+        t_list  *head;
+
+        res = 2147483647;
+        head = a;
+        if (!max_min(*b_num, a))
+        {
+                while (a->next)
+                {
+                        if (*b_num < *((long *)(a->content))
+                                && *b_num > *((long *)(a->next->content)))
+                                return (*((long *)(a->next->content)));
+                        a = a->next;
+                }
+                return (*((long *)(head->content)));
+        }
+        while (a)
+        {
+                if (res > *((long *)(a->content)))
+                        res = *((long *)(a->content));
+                a = a->next;
+        }
+        return (res);
+}
+
+
+long    get_min(t_list *stack)
+{
+        long    min;
+
+        min = 2147483647;
+        while (stack)
+        {
+                if (min > *((long *)(stack->content)))
+                        min = *((long *)(stack->content));
+                stack = stack->next;
+        }
+        return (min);
+}
+
 void	push_all(t_list **a, t_list **b)
 {
-    long    num;
-    int size = ft_lstsize(*a);
-    int a_index;
-    int    moves;
-    while (ft_lstsize(*b) > 0)
-    {
-        num = calc_b_num((*b)->content, *a);
-        a_index = get_index(*a, &num);
-	    if (a_index <= size / 2)
-        {
-            while (a_index)
-            {
-                ra(a, 1);
-                a_index--;
-            }
-        }
-        else
-        {
-            moves = ft_abs(a_index - size);
-            while (moves)
-            {
-                rra(a, 1);
-                moves--;
-            }
-        }
-        pa(a, b, 1);
-    }
+/*	long	a_num;
+	int	index;
+
+	while (*b)
+	{
+		a_num = calc_a_num((*b)->content, *a);
+		index = get_index(*a, &a_num);
+		rotate_a(a, index);
+		pa(a, b, 1);
+	}*/
+	while (*b)
+	{
+		pa(a, b, 1);
+	}
 }
 
 void	cheapest_num(t_list **a, t_list **b)
@@ -439,13 +502,13 @@ void	cheapest_num(t_list **a, t_list **b)
 		best_init(&best);
 	}
 	three_sort(a);
-    push_all(a, b);
-
-    rotate_stack(b);
+	//exit(0);
+	push_all(a, b);
+	rot_to_min(a, 1);
 	print_stack(*a, 'A');
 	print_stack(*b, 'B');
-	//exit(0);
-	//print_stack(*a, 'A');
-	//push_all(a, b);
-	//927 1376 -1012 -2073 3;
+	// exit(0);
+	// print_stack(*a, 'A');
+	// push_all(a, b);
+	// 927 1376 -1012 -2073 3;
 }
