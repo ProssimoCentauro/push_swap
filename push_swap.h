@@ -44,12 +44,6 @@ void		rrb(t_list **b, int flag);
 void		rrr(t_list **a, t_list **b);
 
 void    print_stack(t_list *lst, char c);
+void	three_sort(t_list **lst);
 
-// controllare se è il numero massimo
-// se si calcolare index del numero massimo di b
-// altrimenti calcolare index del numero sopra cui dovrebbe andare il numero di a
-// vedere se le direzioni sono uguali
-// sottrarre per calcolare le mosse che possono avvenire insieme
-// spostare i numeri in prima posizione
-// pushare in b;
 #endif

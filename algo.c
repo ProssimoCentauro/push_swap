@@ -381,10 +381,33 @@ void	rotate_stack(t_list **stack)
 
 void	push_all(t_list **a, t_list **b)
 {
-	while (*b)
-	{
-		pa(a, b, 1);
-	}
+    long    num;
+    int size = ft_lstsize(*a);
+    int a_index;
+    int    moves;
+    while (ft_lstsize(*b) > 0)
+    {
+        num = calc_b_num((*b)->content, *a);
+        a_index = get_index(*a, &num);
+	    if (a_index <= size / 2)
+        {
+            while (a_index)
+            {
+                ra(a, 1);
+                a_index--;
+            }
+        }
+        else
+        {
+            moves = ft_abs(a_index - size);
+            while (moves)
+            {
+                rra(a, 1);
+                moves--;
+            }
+        }
+        pa(a, b, 1);
+    }
 }
 
 void	cheapest_num(t_list **a, t_list **b)
@@ -398,7 +421,7 @@ void	cheapest_num(t_list **a, t_list **b)
 	best_init(&best);
 	pb(a, b, 1);
 	pb(a, b, 1);
-	while (ft_lstsize(*a) > 0)
+	while (ft_lstsize(*a) > 3)
 	{
 		a_head = *a;
 		b_head = *b;
@@ -415,11 +438,14 @@ void	cheapest_num(t_list **a, t_list **b)
 		rotate_and_push(&best, a, b);
 		best_init(&best);
 	}
-	rotate_stack(b);
-	//print_stack(*a, 'A');
-	//print_stack(*b, 'B');
+	three_sort(a);
+    push_all(a, b);
+
+    rotate_stack(b);
+	print_stack(*a, 'A');
+	print_stack(*b, 'B');
 	//exit(0);
 	//print_stack(*a, 'A');
-	push_all(a, b);
+	//push_all(a, b);
 	//927 1376 -1012 -2073 3;
 }
