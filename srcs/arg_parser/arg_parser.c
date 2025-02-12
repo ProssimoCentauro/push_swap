@@ -1,5 +1,5 @@
-#include "mov.c"
 #include "algo.c"
+#include "mov.c"
 #include "push_swap.h"
 
 void	free_matrix(char ***matrix)
@@ -209,6 +209,24 @@ void	parse_args(t_list **a_stack, char **av)
 		free_and_exit(a_stack, content_del, INPUT_ERROR);
 }
 
+int	sorted(t_list *stack)
+{
+	long	num;
+
+	if (ft_lstsize(stack) == 0)
+		return (0);
+	num = *((long *)(stack->content));
+	stack = stack->next;
+	while (stack)
+	{
+		if (num > *((long *)(stack->content)))
+			return (0);
+		num = *((long *)(stack->content));
+		stack = stack->next;
+	}
+	return (1);
+}
+
 int	main(int ac, char **av)
 {
 	t_list	*a_stack;
@@ -219,19 +237,8 @@ int	main(int ac, char **av)
 	if (ac == 1)
 		exit(EXIT_FAILURE);
 	parse_args(&a_stack, av);
-//	print_stack(a_stack, 'A');
-//	print_stack(b_stack, 'B');
-//	ft_printf("%p\n",&b_stack);
-//	start_algo(&a_stack, &b_stack);
-	
-//	ft_printf("\n-------------------------\n");	
-	if (ft_lstsize(a_stack) > 3)
-		cheapest_num(&a_stack, &b_stack);
-	else
-		three_sort(&a_stack);
-//	print_stack(a_stack, 'A');
-//	print_stack(b_stack, 'B');
-
+	if (!sorted(a_stack))
+		select_algo(&a_stack, &b_stack);
 	ft_lstclear(&a_stack, content_del);
 	return (0);
 }

@@ -358,7 +358,6 @@ void	rot_to_min(t_list **stack, int flag)
 	int		size;
 
 	min = get_min(*stack);
-	//ft_printf("%d\n\n", min);
 	index = get_index(*stack, &min);
 	size = ft_lstsize(*stack);
 	if (index <= size / 2)
@@ -375,7 +374,6 @@ void	rot_to_min(t_list **stack, int flag)
 	else
 	{
 		index = ft_abs(index - size);
-		//ft_printf("%d\n\n", index);
 		while (index > 0)
 		{
 			if (flag == 1)
@@ -387,13 +385,46 @@ void	rot_to_min(t_list **stack, int flag)
 	}
 }
 
+void	rot_to_max(t_list **stack, int flag)
+{
+	long	max;
+	int		index;
+	int		size;
+
+	max = get_max(*stack);
+	index = get_index(*stack, &max);
+	size = ft_lstsize(*stack);
+	if (index <= size / 2)
+	{
+		while (index > 0)
+		{
+			if (flag == 1)
+				ra(stack, 1);
+			else
+				rb(stack, 1);
+			index--;
+		}
+	}
+	else
+	{
+		index = ft_abs(index - size);
+		while (index > 0)
+		{
+			if (flag == 1)
+				rra(stack, 1);
+			else
+				rrb(stack, 1);
+			index--;
+		}
+	}
+}
 void	rotate_a(t_list **a, int index)
 {
 	int	size;
 	int	moves;
 
 	size = ft_lstsize(*a);
-	if (index >= size)
+	if (index <= size)
 	{
 		moves = index;
 		while (moves)
@@ -424,8 +455,8 @@ long    calc_a_num(long *b_num, t_list *a)
         {
                 while (a->next)
                 {
-                        if (*b_num < *((long *)(a->content))
-                                && *b_num > *((long *)(a->next->content)))
+                        if (*b_num > *((long *)(a->content))
+                                && *b_num < *((long *)(a->next->content)))
                                 return (*((long *)(a->next->content)));
                         a = a->next;
                 }
@@ -437,6 +468,8 @@ long    calc_a_num(long *b_num, t_list *a)
                         res = *((long *)(a->content));
                 a = a->next;
         }
+        if (get_index(a, &res) == ft_lstsize(a) - 1)
+            return (0);
         return (res);
 }
 
@@ -455,9 +488,9 @@ long    get_min(t_list *stack)
         return (min);
 }
 
-void	push_all(t_list **a, t_list **b)
+void	few_push_all(t_list **a, t_list **b)
 {
-/*	long	a_num;
+	long	a_num;
 	int	index;
 
 	while (*b)
@@ -466,14 +499,12 @@ void	push_all(t_list **a, t_list **b)
 		index = get_index(*a, &a_num);
 		rotate_a(a, index);
 		pa(a, b, 1);
-	}*/
-	while (*b)
-	{
-		pa(a, b, 1);
 	}
 }
 
-void	cheapest_num(t_list **a, t_list **b)
+
+
+void	few_cheapest_num(t_list **a, t_list **b)
 {
 	t_indexes	indxs;
 	t_list		*a_head;
@@ -502,13 +533,71 @@ void	cheapest_num(t_list **a, t_list **b)
 		best_init(&best);
 	}
 	three_sort(a);
-	//exit(0);
+	few_push_all(a, b);
+	rot_to_min(a, 1);
+}
+
+
+void	push_all(t_list **a, t_list **b)
+{
+	while (*b)
+		pa(a, b, 1);
+}
+
+
+
+void	cheapest_num(t_list **a, t_list **b)
+{
+	t_indexes	indxs;
+	t_list		*a_head;
+	t_list		*b_head;
+	t_best		best;
+	long		num;
+
+	best_init(&best);
+	pb(a, b, 1);
+	pb(a, b, 1);
+	while (ft_lstsize(*a) > 0)
+	{
+		a_head = *a;
+		b_head = *b;
+		while (*a)
+		{
+			indxs.a_index = get_index(a_head, (*a)->content);
+			num = calc_b_num((*a)->content, b_head);
+			indxs.b_index = get_index(b_head, &num);
+			update_best(&best, &indxs, a_head, b_head);
+			*a = (*a)->next;
+		}
+		*a = a_head;
+		*b = b_head;
+		rotate_and_push(&best, a, b);
+		best_init(&best);
+	}
 	push_all(a, b);
 	rot_to_min(a, 1);
-	print_stack(*a, 'A');
-	print_stack(*b, 'B');
-	// exit(0);
-	// print_stack(*a, 'A');
-	// push_all(a, b);
-	// 927 1376 -1012 -2073 3;
+}
+
+void    two_sort(t_list **a)
+{
+    if (*((long*)((*a)->content)) > *((long*)(*a)->next->content))
+        sa(a, 1);
+}
+
+void    select_algo(t_list **a, t_list **b)
+{
+    int size;
+
+    size = ft_lstsize(*a);
+    if (size <= 7)
+    {
+        if (size == 2)
+            two_sort(a);
+        else if (size == 3)
+            three_sort(a);
+        else
+            few_cheapest_num(a, b);
+    }
+    else
+        cheapest_num(a, b);
 }
