@@ -1,9 +1,9 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-# include "libft/header_files/ft_printf.h"
-# include "libft/header_files/get_next_line.h"
-# include "libft/header_files/libft.h"
+# include "../libft/header_files/ft_printf.h"
+# include "../libft/header_files/get_next_line.h"
+# include "../libft/header_files/libft.h"
 # include <stdio.h>
 # include <stdlib.h>
 
@@ -83,5 +83,6 @@ void    few_cheapest_num(t_list **a, t_list **b);
 void    push_all(t_list **a, t_list **b);
 void    cheapest_num(t_list **a, t_list **b);
 void    select_algo(t_list **a, t_list **b);
+void    two_sort(t_list **a);
 
 #endif

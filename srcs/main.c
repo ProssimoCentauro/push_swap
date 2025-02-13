@@ -1,5 +1,3 @@
-#include "algo.c"
-#include "mov.c"
 #include "push_swap.h"
 
 void	print_stack(t_list *lst, char c)

@@ -1,3 +1,5 @@
+#include "push_swap.h"
+
 int     get_index(t_list *lst, long *num)
 {
         int     index;
