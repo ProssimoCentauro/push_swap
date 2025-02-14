@@ -1,5 +1,6 @@
 #Variables
 NAME = push_swap
+BONUS = checker
 
 SRCS_DIR = ./srcs/
 HEADER_DIR = ./header/
@@ -33,14 +34,21 @@ $(LIBFT):
 push_swap: $(OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lm -o push_swap
 
+bonus:
+	@echo "Compiling bonus..."
+	@make -C ./checker_program
+
 clean:
 	@echo "Cleaning object files..."
 	@rm -f $(OBJS)
 	@make -C ./libft clean
+	@make -C ./checker_program clean
+
 
 fclean: clean
 	@echo "Cleaning binaries..."
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(BONUS)
 	@make -C ./libft fclean
+	@make -C ./checker_program fclean
 
 re: fclean all
