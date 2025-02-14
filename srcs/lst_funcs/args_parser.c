@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   args_parser.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rtodaro <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/14 15:57:05 by rtodaro           #+#    #+#             */
+/*   Updated: 2025/02/14 15:57:06 by rtodaro          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 int	check_args(char **args)
@@ -74,55 +86,54 @@ long	ft_atol(char *nptr)
 	return (num * sign);
 }
 
-void    parse_args(t_list **a_stack, char **av)
+void	parse_args(t_list **a_stack, char **av)
 {
-        size_t  i;
-        char    **matrix;
+	size_t	i;
+	char	**matrix;
 
-        i = 1;
-        while (av[i])
-        {
-                matrix = ft_split(av[i++], ' ');
-                if (!matrix)
-                        free_and_exit(a_stack, content_del, MALLOC_ERROR);
-                if (!check_args(matrix))
-                {
-                        free_matrix(&matrix);
-                        free_and_exit(a_stack, content_del, INPUT_ERROR);
-                }
-                create_list(a_stack, &matrix);
-                free_matrix(&matrix);
-        }
-        if (check_duplicates(*a_stack) == 0)
-                free_and_exit(a_stack, content_del, INPUT_ERROR);
+	i = 1;
+	while (av[i])
+	{
+		matrix = ft_split(av[i++], ' ');
+		if (!matrix)
+			free_and_exit(a_stack, content_del, MALLOC_ERROR);
+		if (!check_args(matrix))
+		{
+			free_matrix(&matrix);
+			free_and_exit(a_stack, content_del, INPUT_ERROR);
+		}
+		create_list(a_stack, &matrix);
+		free_matrix(&matrix);
+	}
+	if (check_duplicates(*a_stack) == 0)
+		free_and_exit(a_stack, content_del, INPUT_ERROR);
 }
 
-void    create_list(t_list **lst, char ***matrix)
+void	create_list(t_list **lst, char ***matrix)
 {
-        t_list  *node;
-        long    *num;
-        char    **mat;
-        size_t  i;
+	t_list	*node;
+	long	*num;
+	char	**mat;
+	size_t	i;
 
-        mat = *matrix;
-        i = 0;
-        while (mat[i])
-        {
-                num = (long *)malloc(sizeof(long));
-                if (!num)
-                        free_and_exit(lst, content_del, MALLOC_ERROR);
-                *num = ft_atol(mat[i]);
-                if (*num > 2147483647 || *num < -2147483648)
-                {
-                        free_matrix(matrix);
-                        free(num);
-                        free_and_exit(lst, content_del, INPUT_ERROR);
-                }
-                node = ft_lstnew(num);
-                if (!node)
-                        free_and_exit(lst, content_del, MALLOC_ERROR);
-                ft_lstadd_back(lst, node);
-                i++;
-        }
+	mat = *matrix;
+	i = 0;
+	while (mat[i])
+	{
+		num = (long *)malloc(sizeof(long));
+		if (!num)
+			free_and_exit(lst, content_del, MALLOC_ERROR);
+		*num = ft_atol(mat[i]);
+		if (*num > 2147483647 || *num < -2147483648)
+		{
+			free_matrix(matrix);
+			free(num);
+			free_and_exit(lst, content_del, INPUT_ERROR);
+		}
+		node = ft_lstnew(num);
+		if (!node)
+			free_and_exit(lst, content_del, MALLOC_ERROR);
+		ft_lstadd_back(lst, node);
+		i++;
+	}
 }
-

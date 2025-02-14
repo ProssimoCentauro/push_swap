@@ -1,46 +1,57 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   reverse_rotate_funcs.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rtodaro <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/14 15:53:25 by rtodaro           #+#    #+#             */
+/*   Updated: 2025/02/14 15:53:26 by rtodaro          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "checker.h"
 
-void    rra(t_list **a, int flag)
+void	rra(t_list **a, int flag)
 {
-        t_list  *temp;
-        t_list  *last;
+	t_list	*temp;
+	t_list	*last;
 
-        if (!a || !*a || !(*a)->next)
-                return ;
-        temp = *a;
-        while (temp->next->next)
-                temp = temp->next;
-        last = temp->next;
-        temp->next = NULL;
-        last->next = *a;
-        *a = last;
-        if (flag == 1)
-                ft_printf("rra\n");
+	if (!a || !*a || !(*a)->next)
+		return ;
+	temp = *a;
+	while (temp->next->next)
+		temp = temp->next;
+	last = temp->next;
+	temp->next = NULL;
+	last->next = *a;
+	*a = last;
+	if (flag == 1)
+		ft_printf("rra\n");
 }
 
-void    rrb(t_list **b, int flag)
+void	rrb(t_list **b, int flag)
 {
-        t_list  *temp;
-        t_list  *last;
+	t_list	*temp;
+	t_list	*last;
 
-        if (!b || !*b || !(*b)->next)
-                return ;
-        temp = *b;
-        while (temp->next->next)
-                temp = temp->next;
-        last = temp->next;
-        temp->next = NULL;
-        last->next = *b;
-        *b = last;
-        if (flag == 1)
-                ft_printf("rrb\n");
+	if (!b || !*b || !(*b)->next)
+		return ;
+	temp = *b;
+	while (temp->next->next)
+		temp = temp->next;
+	last = temp->next;
+	temp->next = NULL;
+	last->next = *b;
+	*b = last;
+	if (flag == 1)
+		ft_printf("rrb\n");
 }
 
-void    rrr(t_list **a, t_list **b, int flag)
+void	rrr(t_list **a, t_list **b, int flag)
 {
-        rra(a, 0);
-        rra(b, 0);
-        if (flag == 1)
-            ft_printf("rrr\n");
+	rra(a, 0);
+	rra(b, 0);
+	if (flag == 1)
+		ft_printf("rrr\n");
 }
-

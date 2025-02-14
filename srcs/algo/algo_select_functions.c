@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   algo_select_functions.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rtodaro <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/14 15:57:32 by rtodaro           #+#    #+#             */
+/*   Updated: 2025/02/14 16:10:54 by rtodaro          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 void	few_push_all(t_list **a, t_list **b)
@@ -12,13 +24,13 @@ void	few_push_all(t_list **a, t_list **b)
 		rotate_a(a, index);
 		pa(a, b, 1);
 	}
+	rot_to_min(a, 1);
 }
 
 void	few_cheapest_num(t_list **a, t_list **b)
 {
 	t_indexes	indxs;
 	t_list		*a_head;
-	t_list		*b_head;
 	t_best		best;
 	long		num;
 
@@ -28,23 +40,20 @@ void	few_cheapest_num(t_list **a, t_list **b)
 	while (ft_lstsize(*a) > 3)
 	{
 		a_head = *a;
-		b_head = *b;
 		while (*a)
 		{
 			indxs.a_index = get_index(a_head, (*a)->content);
-			num = calc_b_num((*a)->content, b_head);
-			indxs.b_index = get_index(b_head, &num);
-			update_best(&best, &indxs, a_head, b_head);
+			num = calc_b_num((*a)->content, *b);
+			indxs.b_index = get_index(*b, &num);
+			update_best(&best, &indxs, a_head, *b);
 			*a = (*a)->next;
 		}
 		*a = a_head;
-		*b = b_head;
 		rotate_and_push(&best, a, b);
 		best_init(&best);
 	}
 	three_sort(a);
 	few_push_all(a, b);
-	rot_to_min(a, 1);
 }
 
 void	push_all(t_list **a, t_list **b)
@@ -57,7 +66,6 @@ void	cheapest_num(t_list **a, t_list **b)
 {
 	t_indexes	indxs;
 	t_list		*a_head;
-	t_list		*b_head;
 	t_best		best;
 	long		num;
 
@@ -67,17 +75,15 @@ void	cheapest_num(t_list **a, t_list **b)
 	while (ft_lstsize(*a) > 0)
 	{
 		a_head = *a;
-		b_head = *b;
 		while (*a)
 		{
 			indxs.a_index = get_index(a_head, (*a)->content);
-			num = calc_b_num((*a)->content, b_head);
-			indxs.b_index = get_index(b_head, &num);
-			update_best(&best, &indxs, a_head, b_head);
+			num = calc_b_num((*a)->content, *b);
+			indxs.b_index = get_index(*b, &num);
+			update_best(&best, &indxs, a_head, *b);
 			*a = (*a)->next;
 		}
 		*a = a_head;
-		*b = b_head;
 		rotate_and_push(&best, a, b);
 		best_init(&best);
 	}
