@@ -1,5 +1,5 @@
 #Variables
-NAME = checker
+NAME = ../checker
 
 SRCS_DIR = ./srcs/
 HEADER_DIR = ./header/
@@ -27,8 +27,8 @@ $(LIBFT):
 	@echo "Compiling Libft..."
 	@make -C ../libft
 
-checker: $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lm -o ../checker
+../checker: $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lm -o $(NAME)
 
 clean:
 	@echo "Cleaning object files..."
