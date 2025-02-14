@@ -6,7 +6,7 @@
 /*   By: rtodaro <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:57:11 by rtodaro           #+#    #+#             */
-/*   Updated: 2025/02/14 15:57:12 by rtodaro          ###   ########.fr       */
+/*   Updated: 2025/02/14 18:34:13 by rtodaro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ void	free_and_exit(t_list **lst, void (*del)(void *), char *message)
 {
 	if (lst)
 		ft_lstclear(lst, del);
-	ft_printf("%s", message);
+	write(2, message, 6);
 	exit(EXIT_FAILURE);
 }

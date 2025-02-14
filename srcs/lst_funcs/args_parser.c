@@ -6,7 +6,7 @@
 /*   By: rtodaro <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:57:05 by rtodaro           #+#    #+#             */
-/*   Updated: 2025/02/14 15:57:06 by rtodaro          ###   ########.fr       */
+/*   Updated: 2025/02/14 18:31:31 by rtodaro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,25 @@ int	check_args(char **args)
 {
 	size_t	i;
 	size_t	j;
+	size_t	count;
+
 
 	i = 0;
 	while (args[i])
 	{
 		j = 0;
+		count = 0;
 		if (args[i][j] == '+' || args[i][j] == '-')
 			j++;
 		if (args[i][j] == '\0')
 			return (0);
 		while (args[i][j] >= '0' && args[i][j] <= '9' && args[i][j] != '\"')
+		{
 			j++;
+			count++;
+			if (count >= 11)
+				return (0);
+		}
 		if (args[i][j] != '\0')
 			return (0);
 		i++;
