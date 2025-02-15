@@ -6,7 +6,7 @@
 /*   By: rtodaro <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:56:02 by rtodaro           #+#    #+#             */
-/*   Updated: 2025/02/14 15:56:03 by rtodaro          ###   ########.fr       */
+/*   Updated: 2025/02/15 16:51:54 by rtodaro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define MALLOC_ERROR "\n\033[1;31m><>< MALLOC ERROR ><><\033[0m\n\n"
+# define MALLOC_ERROR "> MALLOC ERROR <"
 # define INPUT_ERROR "Error\n"
 
 //////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ void	print_stack(t_list *lst, char c);
 void	three_sort(t_list **lst);
 void	free_matrix(char ***matrix);
 void	content_del(void *content);
-void	free_and_exit(t_list **lst, void (*del)(void *), char *message);
+void	free_and_exit(t_list **lst, void (*del)(void *), int error);
 int		check_args(char **args);
 int		check_duplicates(t_list *lst);
 long	ft_atol(char *nptr);
@@ -67,6 +67,7 @@ void	create_list(t_list **lst, char ***matrix);
 t_list	*find_max(t_list *lst);
 void	parse_args(t_list **a_stack, char **av);
 int		sorted(t_list *stack);
+int		check_len(char *str);
 
 // algo.c
 int		detect_half(t_list *lst, long *num);

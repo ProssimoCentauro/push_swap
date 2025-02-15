@@ -6,7 +6,7 @@
 /*   By: rtodaro <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:57:11 by rtodaro           #+#    #+#             */
-/*   Updated: 2025/02/14 18:34:13 by rtodaro          ###   ########.fr       */
+/*   Updated: 2025/02/15 12:01:27 by rtodaro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,13 @@ void	content_del(void *content)
 	free(content);
 }
 
-void	free_and_exit(t_list **lst, void (*del)(void *), char *message)
+void	free_and_exit(t_list **lst, void (*del)(void *), int error)
 {
 	if (lst)
 		ft_lstclear(lst, del);
-	write(2, message, 6);
+	if (error == 0)
+		write(2, INPUT_ERROR, 6);
+	if (error == 1)
+		write(2, MALLOC_ERROR, 16);
 	exit(EXIT_FAILURE);
 }

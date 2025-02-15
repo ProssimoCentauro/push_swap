@@ -6,7 +6,7 @@
 /*   By: rtodaro <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:57:05 by rtodaro           #+#    #+#             */
-/*   Updated: 2025/02/14 18:31:31 by rtodaro          ###   ########.fr       */
+/*   Updated: 2025/02/15 16:29:42 by rtodaro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,19 @@ int	check_args(char **args)
 {
 	size_t	i;
 	size_t	j;
-	size_t	count;
-
 
 	i = 0;
 	while (args[i])
 	{
+		if (!check_len(args[i]))
+			return (0);
 		j = 0;
-		count = 0;
 		if (args[i][j] == '+' || args[i][j] == '-')
 			j++;
 		if (args[i][j] == '\0')
 			return (0);
 		while (args[i][j] >= '0' && args[i][j] <= '9' && args[i][j] != '\"')
-		{
 			j++;
-			count++;
-			if (count >= 11)
-				return (0);
-		}
 		if (args[i][j] != '\0')
 			return (0);
 		i++;
@@ -104,17 +98,17 @@ void	parse_args(t_list **a_stack, char **av)
 	{
 		matrix = ft_split(av[i++], ' ');
 		if (!matrix)
-			free_and_exit(a_stack, content_del, MALLOC_ERROR);
+			free_and_exit(a_stack, content_del, 1);
 		if (!check_args(matrix))
 		{
 			free_matrix(&matrix);
-			free_and_exit(a_stack, content_del, INPUT_ERROR);
+			free_and_exit(a_stack, content_del, 0);
 		}
 		create_list(a_stack, &matrix);
 		free_matrix(&matrix);
 	}
 	if (check_duplicates(*a_stack) == 0)
-		free_and_exit(a_stack, content_del, INPUT_ERROR);
+		free_and_exit(a_stack, content_del, 0);
 }
 
 void	create_list(t_list **lst, char ***matrix)
@@ -130,17 +124,17 @@ void	create_list(t_list **lst, char ***matrix)
 	{
 		num = (long *)malloc(sizeof(long));
 		if (!num)
-			free_and_exit(lst, content_del, MALLOC_ERROR);
+			free_and_exit(lst, content_del, 1);
 		*num = ft_atol(mat[i]);
 		if (*num > 2147483647 || *num < -2147483648)
 		{
 			free_matrix(matrix);
 			free(num);
-			free_and_exit(lst, content_del, INPUT_ERROR);
+			free_and_exit(lst, content_del, 0);
 		}
 		node = ft_lstnew(num);
 		if (!node)
-			free_and_exit(lst, content_del, MALLOC_ERROR);
+			free_and_exit(lst, content_del, 1);
 		ft_lstadd_back(lst, node);
 		i++;
 	}

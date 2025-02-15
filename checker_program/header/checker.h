@@ -6,7 +6,7 @@
 /*   By: rtodaro <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:32:13 by rtodaro           #+#    #+#             */
-/*   Updated: 2025/02/14 15:53:06 by rtodaro          ###   ########.fr       */
+/*   Updated: 2025/02/15 12:38:51 by rtodaro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define MALLOC_ERROR "\n\033[1;31m><>< MALLOC ERROR ><><\033[0m\n\n"
+# define MALLOC_ERROR "> MALLOC ERROR <"
 # define INPUT_ERROR "Error\n"
 
 //////////////////////////////////////////////////////////
@@ -40,13 +40,14 @@ void	rrr(t_list **a, t_list **b, int flag);
 
 void	free_matrix(char ***matrix);
 void	content_del(void *content);
-void	free_and_exit(t_list **lst, void (*del)(void *), char *message);
+void	free_and_exit(t_list **lst, void (*del)(void *), int error);
 int		check_args(char **args);
 int		check_duplicates(t_list *lst);
 long	ft_atol(char *nptr);
 void	create_list(t_list **lst, char ***matrix);
 void	parse_args(t_list **a_stack, char **av);
 int		sorted(t_list *stack);
+int		check_len(char *str);
 
 // get inputs
 int		select_move(char *str, t_list **a, t_list **b);

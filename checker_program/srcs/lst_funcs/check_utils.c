@@ -1,45 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_funcs.c                                       :+:      :+:    :+:   */
+/*   check_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtodaro <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/14 15:54:54 by rtodaro           #+#    #+#             */
-/*   Updated: 2025/02/15 12:04:34 by rtodaro          ###   ########.fr       */
+/*   Created: 2025/02/15 17:04:22 by rtodaro           #+#    #+#             */
+/*   Updated: 2025/02/15 17:04:22 by rtodaro          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
-void	free_matrix(char ***matrix)
+int	check_len(char *str)
 {
-	char	**mat;
 	size_t	i;
+	size_t	count;
 
-	mat = *matrix;
 	i = 0;
-	while (mat[i])
+	count = 0;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	if (str[i] == '\0')
+		return (0);
+	while (str[i] >= '0' && str[i] <= '9' && str[i] != '\"')
 	{
-		free(mat[i]);
-		mat[i++] = NULL;
+		i++;
+		count++;
+		if (count >= 11)
+			return (0);
 	}
-	free(mat);
-	mat = NULL;
-}
-
-void	content_del(void *content)
-{
-	free(content);
-}
-
-void	free_and_exit(t_list **lst, void (*del)(void *), int error)
-{
-	if (lst)
-		ft_lstclear(lst, del);
-	if (error == 0)
-		write(2, INPUT_ERROR, 6);
-	if (error == 1)
-		write(2, MALLOC_ERROR, 16);
-	exit(EXIT_FAILURE);
+	if (str[i] != '\0')
+		return (0);
+	return (1);
 }
